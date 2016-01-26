@@ -1,0 +1,976 @@
+package com.health.dao;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Exchanger;
+
+import javax.servlet.ServletException;
+
+import org.apache.catalina.startup.UserConfig;
+import org.apache.poi.hssf.record.formula.functions.Trimmean;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+import cn.eavic.framework.orm.hibernate.GenericDao;
+
+import com.health.entity.Aboutus;
+import com.health.entity.Bootpage;
+import com.health.entity.Firstpage;
+import com.health.entity.Knowledge;
+import com.health.entity.Message;
+import com.health.entity.Onlinefirst;
+import com.health.entity.Onlinetest;
+import com.health.entity.Recommend;
+import com.health.entity.Supports;
+import com.health.entity.User;
+import com.health.entity.Version;
+import com.health.common.Commonparam;
+
+
+
+
+
+
+
+
+@Repository
+public class UserDao extends GenericDao<User, Long> {
+
+	
+	/**
+	 * 后台用户
+	 */
+	public User loginTest(String username, String pass) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"from User t where t.account=? and t.passWord=?");
+			q.setString(0, username);
+			q.setString(1, pass);
+			if (q.list().size() > 0) {
+				return (User) q.list().get(0);
+			}
+		} catch (Exception ee) {
+
+		}
+		return null;
+	}
+
+	/**
+	 * 后台用户
+	 */
+	public List<User> loadUserinfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from User order by id desc");
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	/**
+	 * 后台用户 数据统计
+	 */
+
+	public Object loadUserinfoCount() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession()
+					.createQuery("select count(*) from User order by id desc");
+			return q.list().get(0);
+
+		} catch (Exception ee) {
+
+		}
+		return 0;
+	}
+	
+	
+	/**
+	 * 添加后台用户
+	 */
+      public boolean addUserinfo(User phoe) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(phoe);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+
+  	public Integer testAccount(String account) {
+  		// TODO Auto-generated method stub
+  		try {
+			Query q = this.getSession().createQuery(
+					"from User where account = ?");
+			q.setString(0, account);
+			q.list();
+			return q.list().size();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+  	
+  	
+	/**
+	 * 修改后台用户
+	 */
+
+	public boolean updateuserinfo(Long userId, String account, String passWord ) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"UPDATE User u SET u.account=?,u.passWord=? WHERE u.id=?");
+			q.setString(0, account);
+			q.setString(1, passWord);
+			q.setLong(2, userId);
+			q.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * 删除
+	 */
+
+	public boolean deleteBaseInfo(String ids, String table) {
+		// TODO Auto-generated method stub
+		try {
+			for (String id : ids.split(",")) {
+				Query q = this.getSession().createQuery(
+						"DELETE FROM " + table + " WHERE id=?");
+				q.setLong(0, Long.valueOf(id));
+				q.executeUpdate();
+			}
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	
+	
+	/**
+	 * 引导页面图片
+	 */
+
+	public List<Bootpage> loadBootpageInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Bootpage order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
+	/**
+	 * 关于我们
+	 */
+
+
+	public List<Aboutus> loadAboutusInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Aboutus order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+	/**
+	 * 关于我们
+	 */
+
+
+	
+	public List<Supports> loadSupportsInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Supports order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	/**
+	 *版本更新
+	 */
+	
+	public List<Version> loadVersionInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Version order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+	
+	
+
+
+	/**
+	 * 接口——知识
+	 * 
+	 */
+	
+	public List<Knowledge> loadKnowledgeInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Knowledge order by id desc");
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	/**
+	 * 接口——知识总数
+	 * 
+	 */
+
+	public Object loadKnowledgeInfoCount() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("select count(*) from Knowledge order by id desc");
+			return q.list().get(0);
+
+		} catch (Exception ee) {
+
+		}
+		return 0;
+	}
+
+	
+	
+
+	/**
+	 * 接口——首页
+	 * @param topNews 
+	 * 
+	 */
+
+	
+	
+	public List<Firstpage> loadFirstpageInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		try {
+			Criteria q = this.getSession().createCriteria(Firstpage.class);
+			q.addOrder(Order.desc("id"));
+			q.setFirstResult((page-1)*rows);
+			q.setMaxResults(rows);
+			return q.list();
+			
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+
+	/**
+	 * 接口——首页  总数
+	 * 
+	 */
+
+	
+	public Object loadFirstpageInfoCount() {
+		// TODO Auto-generated method stub
+		try {
+			Criteria q = this.getSession().createCriteria(Firstpage.class);
+			q.setProjection(Projections.projectionList().add(Projections.rowCount()));
+			return q.list().get(0);
+			
+		} catch (Exception ee) {
+
+		}
+		return 0;
+	}
+
+	
+
+
+	
+	
+
+	/**
+	 * 接口——在线测试
+	 * 
+	 */
+
+	public List<Onlinetest> loadOnlinetestInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Onlinetest  order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+	
+
+	/**
+	 *   首页关键字模糊搜索
+	 */
+
+
+	public List<Object[]> findFirstpageKeyword(String keyword, int rows,
+			int page) {
+		SQLQuery q = this.getSession().createSQLQuery(
+		"SELECT id,title,introduction,creat_time,img_detail,source,content,img_info,img_video,video_url,img_top  from tb_firstpage where title like ?");
+          q.setString(0, "%" + keyword + "%");
+          q.setFirstResult((page - 1) * rows);
+          q.setMaxResults(rows);
+        return q.list();
+
+	  }
+	
+	
+
+	/**
+	 *  首页关键字模糊搜索
+	 */
+
+
+	public Object findFirstpageKeywordCount(String keyword) {
+		// TODO Auto-generated method stub
+		Criteria c = this.getSession().createCriteria(Firstpage.class);
+		c.setProjection(Projections.projectionList().add(Projections.rowCount()));
+		c.add(Restrictions.like("title", "%" + keyword + "%"));
+		return c.uniqueResult();
+	
+	}
+
+	
+	/**
+	 * 添加 引导页 
+	 * 目标文件夹+最终文件名
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public boolean addBootpageImge(Bootpage com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * 修改 引导页 
+	 * 
+	 */
+
+	public boolean updateBootpageimage(Long homeId, String spath) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Bootpage u  WHERE u.id=?");
+			q.setLong(0, homeId);
+			Bootpage page = (Bootpage) q.uniqueResult();
+
+			if (spath.trim().length() > 0) {
+				page.setBootPage(spath);
+			}
+			this.getSession().saveOrUpdate(page);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 添加 关于我们
+	 * @param com
+	 * @return
+	 */
+	public boolean addAboutus(Aboutus com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+
+	/**
+	 * 修改 关于我们
+	 * 
+	 */
+	public boolean updatpeAboutus(Long aboutusId, String title, String content) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this
+					.getSession()
+					.createQuery(
+							"UPDATE Aboutus u SET u.title=?,u.content=?  WHERE u.id=?");
+
+			q.setString(0, title);
+			q.setString(1, content);
+			q.setLong(2, aboutusId);
+			q.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 添加 技术支持
+	 * @param com
+	 * @return
+	 */
+	
+	public boolean addSupports(Supports com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	
+	/**
+	 * 修改 技术支持
+	 * 
+	 */
+	
+	
+	public boolean updatpeSupports(Long supportsId, String title, String content) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this
+					.getSession()
+					.createQuery(
+							"UPDATE Supports u SET u.title=?,u.content=?  WHERE u.id=?");
+
+			q.setString(0, title);
+			q.setString(1, content);
+			q.setLong(2, supportsId);
+			q.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 修改 版本更新
+	 * 
+	 */
+	
+	public boolean updatpeVersion(Long versionId, String title, String urlpath,
+			String urlNum) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this
+					.getSession()
+					.createQuery(
+							"UPDATE Version u SET u.title=?,u.urlpath=?,u.urlNum=?  WHERE u.id=?");
+
+			q.setString(0, title);
+			q.setString(1, urlpath);
+			q.setString(2, urlNum);
+			q.setLong(3, versionId);
+			q.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 反馈意见
+	 * 
+	 */
+	
+	public List<Message> loadMessageInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Message order by id desc");
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+	/**
+	 * 反馈意见  总数
+	 * 
+	 */
+	
+	public Object loadMessageInfoCount() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("select count(*) from Message order by id desc");
+			return q.list().get(0);
+
+		} catch (Exception ee) {
+
+		}
+		return 0;
+	}
+	
+	
+	/**
+	 * 添加 在线测试
+	 * @param com
+	 * @return
+	 */
+
+	public boolean addOnlinetest(Onlinetest com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 修改 在线测试
+	 * 
+	 */
+	public boolean updatpeOnlinetest(Long onlinetestId, String topic,
+			String testa, String testb, String testc, String testd,
+			Integer correctAnswer) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this
+					.getSession()
+					.createQuery(
+							"UPDATE Onlinetest u SET u.topic=?,u.testa=?,u.testb=?,u.testc=?,u.testd=?,u.correctAnswer=?  WHERE u.id=?");
+
+			q.setString(0, topic);
+			q.setString(1, testa);
+			q.setString(2, testb);
+			q.setString(3, testc);
+			q.setString(4, testd);
+			q.setInteger(5, correctAnswer);
+			q.setLong(6, onlinetestId);
+			q.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 添加知识
+	 * 
+	 */
+	
+	public boolean addKnowledge(Knowledge com) {
+		// TODO Auto-generated method stub
+		try {
+			com.setCreatTime(Commonparam.Date2Str(new Date()));
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * 修改  知识
+	 * 
+	 */
+	
+
+	public boolean updateKnowledge(Long knowledgeId, String title,
+			String introduction, String content, String videoUrl,
+			String source, String spath, String spathtw, String spathth) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"from Knowledge u  WHERE u.id=?");
+			q.setLong(0, knowledgeId);
+			Knowledge page = (Knowledge) q.uniqueResult();
+
+			page.setTitle(title);
+			page.setIntroduction(introduction);
+			page.setContent(content);
+			page.setVideoUrl(videoUrl);
+			page.setSource(source);
+			page.setCreatTime(Commonparam.Date2Str(new Date()));
+			
+			if (spath.trim().length() > 0) {
+				page.setImgInfo(spath);
+				
+			}
+			if (spathtw.trim().length() > 0) {
+				page.setImgDetail(spathtw);
+			}
+			if (spathth.trim().length() > 0) {
+				page.setImgVideo(spathth);
+			}
+
+			this.getSession().saveOrUpdate(page);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+
+	/**
+	 * 添加 首页
+	 * 
+	 */
+	
+	
+	public boolean addFirstpage(Firstpage com) {
+		// TODO Auto-generated method stub
+		try {
+			com.setCreatTime(Commonparam.Date2Str(new Date()));
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * 修改  首页
+	 * 
+	 */
+	
+	
+	public boolean updateFirstpage(Long firstpageId, String title,
+			String introduction, String content,
+			String source, String spath, String spathtw) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"from Firstpage u  WHERE u.id=?");
+			q.setLong(0, firstpageId);
+			Firstpage page = (Firstpage) q.uniqueResult();
+
+			page.setTitle(title);
+			page.setIntroduction(introduction);
+			page.setContent(content);
+			page.setSource(source);
+			page.setCreatTime(Commonparam.Date2Str(new Date()));
+			
+			if (spath.trim().length() > 0) {
+				page.setImgInfo(spath);
+				
+			}
+			if (spathtw.trim().length() > 0) {
+				page.setImgDetail(spathtw);
+			}
+
+			this.getSession().saveOrUpdate(page);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+	
+	/**
+	 *   在线测试 首页
+	 * 
+	 */
+
+	public List<Onlinefirst> loadOnlinefirstInfo() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Onlinefirst order by id desc");
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+	
+	/**
+	 * 添加在线测试 首页
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	public boolean addOnlinefirst(Onlinefirst com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 修改在线测试 首页
+	 * @param spath2 
+	 * 
+	 */
+	
+	public boolean updateOnlinefirst(Long onlinefirstId, String content,String introduction,
+			String spath) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"from Onlinefirst u  WHERE u.id=?");
+			q.setLong(0, onlinefirstId);
+			Onlinefirst page = (Onlinefirst) q.uniqueResult();
+
+		
+			page.setContent(content);
+            page.setIntroduction(introduction);
+			
+			if (spath.trim().length() > 0) {
+				page.setImgInfo(spath);
+				
+			}
+			this.getSession().saveOrUpdate(page);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+
+	/**
+	 *   实用推荐
+	 * 
+	 */
+
+	public List<Recommend> loadRecommendInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("from Recommend order by id desc");
+			q.setFirstResult((page - 1) * rows);
+			q.setMaxResults(rows);
+			return q.list();
+		} catch (Exception ee) {
+
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	
+	
+
+	/**
+	 *   实用推荐
+	 * 
+	 */
+	
+	public Object loadRecommendInfoCount() {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("select count(*) from Recommend order by id desc");
+			return q.list().get(0);
+
+		} catch (Exception ee) {
+
+		}
+		return 0;
+	}
+	
+	
+	
+	
+	/**
+	 * 添加 实用推荐 目标文件夹+最终文件名
+	 * 
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+
+	public boolean addRecommend(Recommend com) {
+		// TODO Auto-generated method stub
+		try {
+			this.getSession().save(com);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
+
+	/**
+	 * 
+	 * 实用推荐  修改
+	 * 
+	 */
+	
+
+	public boolean updateRecommend(Long recommendId, String title,
+			String introduction, String content, String spath, String spathtw) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"from Recommend u  WHERE u.id=?");
+			q.setLong(0, recommendId);
+			Recommend page = (Recommend) q.uniqueResult();
+
+			page.setTitle(title);
+			page.setIntroduction(introduction);
+			page.setContent(content);
+			
+			if (spath.trim().length() > 0) {
+				page.setImgInfo(spath);
+				
+			}
+			if (spathtw.trim().length() > 0) {
+				page.setImgDetail(spathtw);
+			}
+			this.getSession().saveOrUpdate(page);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+
+
+	/**
+	 * 取消置顶
+	 * @throws Exception
+	 */
+	
+	
+
+	public void topFirstpageCancel(Long Id) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery(
+					"update Firstpage u set u.imgTop=?  WHERE u.id=?");
+			q.setString(0, "1");
+			q.setLong(1, Id);
+			q.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+
+	public Long findFirstpageCount(long firstpageId) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("select count(*) from Firstpage u where u.imgTop=?");
+			q.setString(0, "0");
+			return (Long) q.list().get(0);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0L;
+	}
+
+	
+	
+	public void updateFirstpage(long firstpageId) {
+		// TODO Auto-generated method stub
+		try {
+			Query q = this.getSession().createQuery("update Firstpage u set u.imgTop=?  WHERE u.id=?");
+			q.setString(0, "0");
+			q.setLong(1,firstpageId);
+			q.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	
+	
+	
+
+
+	
+}

@@ -1,0 +1,342 @@
+package com.health.service.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.health.common.Commonparam;
+import com.health.dao.UserDao;
+import com.health.entity.Aboutus;
+import com.health.entity.Bootpage;
+import com.health.entity.Firstpage;
+import com.health.entity.Knowledge;
+import com.health.entity.Message;
+import com.health.entity.Onlinefirst;
+import com.health.entity.Onlinetest;
+import com.health.entity.Recommend;
+import com.health.entity.Supports;
+import com.health.entity.User;
+import com.health.entity.Version;
+import com.health.service.UserManager;
+
+
+
+
+
+import cn.eavic.framework.orm.Page;
+import cn.eavic.framework.orm.PropertyFilter;
+import cn.eavic.framework.service.impl.GenericManagerImpl;
+
+
+
+@Service
+@Transactional
+public class UserManagerImpl implements UserManager {
+	@Autowired
+	UserDao userDao;
+	
+	public UserManagerImpl() {
+	}
+
+	@Override
+	public User loginTest(String username, String pass) {
+		// TODO Auto-generated method stub
+		
+		return userDao.loginTest(username, pass);
+	}
+
+	@Override
+	public List<User> loadUserinfo(int rows,int page) {
+		// TODO Auto-generated method stub
+		return userDao.loadUserinfo(rows,page);
+	}
+
+	@Override
+	public Object loadUserinfoCount() {
+		// TODO Auto-generated method stub
+		return userDao.loadUserinfoCount();
+	}
+
+	@Override
+	public boolean addUserinfo(User phoe) {
+		// TODO Auto-generated method stub
+		return userDao.addUserinfo(phoe);
+	}
+
+	
+	@Override
+	public Integer testAccount(String account) {
+		// TODO Auto-generated method stub
+		return userDao.testAccount(account);
+	}
+	
+	
+	@Override
+	public boolean updateuserinfo(Long userId, String account, String passWord) {
+		// TODO Auto-generated method stub
+		return userDao.updateuserinfo(userId,account,passWord);
+	}
+
+	@Override
+	public boolean deleteBaseInfo(String ids, String table) {
+		// TODO Auto-generated method stub
+		return userDao.deleteBaseInfo(ids,table);
+	}
+
+
+	@Override
+	public List<Bootpage> loadBootpageInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadBootpageInfo();
+	}
+
+
+
+	@Override
+	public List<Aboutus> loadAboutusInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadAboutusInfo();
+	}
+
+
+
+	@Override
+	public List<Supports> loadSupportsInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadSupportsInfo();
+	}
+
+
+
+	@Override
+	public List<Version> loadVersionInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadVersionInfo();
+	}
+
+
+
+	
+
+
+	@Override
+	public List<Knowledge> loadKnowledgeInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		return userDao.loadKnowledgeInfo(rows,page);
+	}
+
+
+
+	@Override
+	public Object loadKnowledgeInfoCount() {
+		// TODO Auto-generated method stub
+		return userDao.loadKnowledgeInfoCount();
+	}
+
+
+
+	@Override
+	public List<Firstpage> loadFirstpageInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		return userDao.loadFirstpageInfo(rows,page);
+	}
+
+
+
+	@Override
+	public Object loadFirstpageInfoCount() {
+		// TODO Auto-generated method stub
+		return userDao.loadFirstpageInfoCount();
+	}
+
+
+
+
+
+
+
+	@Override
+	public List<Onlinetest> loadOnlinetestInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadOnlinetestInfo();
+	}
+
+
+
+	@Override
+	public List<Object[]> findFirstpageKeyword(String keyword, int rows,
+			int page) {
+		// TODO Auto-generated method stub
+		return userDao.findFirstpageKeyword(keyword,rows,page);
+	}
+
+
+
+	@Override
+	public Object findFirstpageKeywordCount(String keyword) {
+		// TODO Auto-generated method stub
+		return userDao.findFirstpageKeywordCount(keyword);
+	}
+
+	@Override
+	public boolean addBootpageImge(Bootpage com) {
+		// TODO Auto-generated method stub
+		return userDao.addBootpageImge(com);
+	}
+
+	@Override
+	public boolean updateBootpageimage(Long homeId, String spath) {
+		// TODO Auto-generated method stub
+		return userDao.updateBootpageimage(homeId,spath);
+	}
+
+	@Override
+	public boolean addAboutus(Aboutus com) {
+		// TODO Auto-generated method stub
+		return userDao.addAboutus(com);
+	}
+
+	@Override
+	public boolean updatpeAboutus(Long aboutusId, String title, String content) {
+		// TODO Auto-generated method stub
+		return userDao.updatpeAboutus(aboutusId,title,content);
+	}
+
+	@Override
+	public boolean addSupports(Supports com) {
+		// TODO Auto-generated method stub
+		return userDao.addSupports(com);
+	}
+
+	@Override
+	public boolean updatpeSupports(Long supportsId, String title, String content) {
+		// TODO Auto-generated method stub
+		return userDao.updatpeSupports(supportsId,title,content);
+	}
+
+	@Override
+	public boolean updatpeVersion(Long versionId, String title, String urlpath,
+			String urlNum) {
+		// TODO Auto-generated method stub
+		return userDao.updatpeVersion(versionId,title,urlpath,urlNum);
+	}
+
+	@Override
+	public List<Message> loadMessageInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		return userDao.loadMessageInfo(rows,page);
+	}
+
+	@Override
+	public Object loadMessageInfoCount() {
+		// TODO Auto-generated method stub
+		return userDao.loadMessageInfoCount();
+	}
+
+	@Override
+	public boolean addOnlinetest(Onlinetest com) {
+		// TODO Auto-generated method stub
+		return userDao.addOnlinetest(com);
+	}
+
+	@Override
+	public boolean updatpeOnlinetest(Long onlinetestId, String topic,
+			String testa, String testb, String testc, String testd,
+			Integer correctAnswer) {
+		// TODO Auto-generated method stub
+		return userDao.updatpeOnlinetest(onlinetestId,topic,testa,testb,testc,testd,correctAnswer);
+	}
+
+	@Override
+	public boolean addKnowledge(Knowledge com) {
+		// TODO Auto-generated method stub
+		return userDao.addKnowledge(com);
+	}
+
+	@Override
+	public boolean updateKnowledge(Long knowledgeId, String title,
+			String introduction, String content, String videoUrl,
+			String source, String spath, String spathtw, String spathth) {
+		// TODO Auto-generated method stub
+		return userDao.updateKnowledge(knowledgeId,title,introduction,content,videoUrl,source,spath,spathtw,spathth);
+	}
+
+	@Override
+	public boolean updateFirstpage(Long firstpageId, String title,
+			String introduction, String content,
+			String source, String spath, String spathtw) {
+		// TODO Auto-generated method stub
+		return userDao.updateFirstpage(firstpageId,title,introduction,content,source,spath,spathtw);
+	}
+
+	@Override
+	public boolean addFirstpage(Firstpage com) {
+		// TODO Auto-generated method stub
+		return userDao.addFirstpage(com);
+	}
+
+	@Override
+	public List<Onlinefirst> loadOnlinefirstInfo() {
+		// TODO Auto-generated method stub
+		return userDao.loadOnlinefirstInfo();
+	}
+
+	@Override
+	public boolean addOnlinefirst(Onlinefirst com) {
+		// TODO Auto-generated method stub
+		return userDao.addOnlinefirst(com);
+	}
+
+	@Override
+	public boolean updateOnlinefirst(Long onlinefirstId, String content,String introduction,
+			String spath) {
+		// TODO Auto-generated method stub
+		return userDao.updateOnlinefirst(onlinefirstId,content,introduction,spath);
+	}
+
+	@Override
+	public List<Recommend> loadRecommendInfo(int rows, int page) {
+		// TODO Auto-generated method stub
+		return userDao.loadRecommendInfo(rows,page);
+	}
+
+
+	@Override
+	public Object loadRecommendInfoCount() {
+		// TODO Auto-generated method stub
+		return userDao.loadRecommendInfoCount();
+	}
+
+	@Override
+	public boolean addRecommend(Recommend com) {
+		// TODO Auto-generated method stub
+		return userDao.addRecommend(com);
+	}
+
+	@Override
+	public boolean updateRecommend(Long recommendId, String title,
+			String introduction, String content, String spath, String spathtw) {
+		// TODO Auto-generated method stub
+		return userDao.updateRecommend(recommendId,title,introduction,content,spath,spathtw);
+	}
+	
+
+
+
+
+
+
+	
+}

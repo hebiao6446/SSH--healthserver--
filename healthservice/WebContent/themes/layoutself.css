@@ -1,0 +1,42 @@
+body {
+	font-size: 14px;
+	margin: 0;
+}
+
+#container {
+	margin: 0 auto;
+	width: 1022px;
+}
+
+#header {
+	height: 92px;
+	background: #fff;
+	font-size: 0px;
+}
+
+#mainContent {
+	margin-bottom: 0px;
+	min-height: 400px;
+}
+
+#left {
+	float: left;
+	border-left: 1px solid #D2E0F2;
+	border-right: 1px solid #D2E0F2;
+	border-bottom: 1px solid #D2E0F2;
+	width: 200px;
+	background: #ff7;
+}
+
+#right {
+	border-right: 2px solid #D2E0F2;
+	margin-left: 202px;
+	background: #f40;
+}
+
+#footer {
+	clear: both;
+	height: 60px;
+	margin-bottom: 0px;
+	background: #9c6;
+}

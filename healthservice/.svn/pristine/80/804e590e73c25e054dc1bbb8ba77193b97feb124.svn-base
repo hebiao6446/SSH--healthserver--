@@ -1,0 +1,130 @@
+package com.health.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+import com.health.entity.Aboutus;
+import com.health.entity.Bootpage;
+import com.health.entity.Firstpage;
+import com.health.entity.Knowledge;
+import com.health.entity.Message;
+import com.health.entity.Onlinefirst;
+import com.health.entity.Onlinetest;
+import com.health.entity.Recommend;
+import com.health.entity.Supports;
+import com.health.entity.User;
+import com.health.entity.Version;
+import com.json.JsonAuthority;
+
+
+import cn.eavic.framework.service.GenericManager;
+
+
+public interface UserManager {
+	
+
+
+
+	public List<Bootpage> loadBootpageInfo();
+
+	public List<Aboutus> loadAboutusInfo();
+
+	public List<Supports> loadSupportsInfo();
+
+	public List<Version> loadVersionInfo();
+
+
+	public List<Knowledge> loadKnowledgeInfo(int rows, int page);
+
+	public Object loadKnowledgeInfoCount();
+
+	public List<Firstpage> loadFirstpageInfo(int rows, int page);
+
+	public Object loadFirstpageInfoCount();
+
+
+	public List<Onlinetest> loadOnlinetestInfo();
+
+	public List<Object[]> findFirstpageKeyword(String keyword, int rows, int page);
+
+	public Object findFirstpageKeywordCount(String keyword);
+
+	public User loginTest(String username,String pass);
+
+	
+	
+	public List<User> loadUserinfo(int rows,int page);
+
+	public Object loadUserinfoCount();
+
+	public boolean addUserinfo(User phoe);
+
+	public boolean updateuserinfo(Long userId, String account, String passWord);
+
+	public boolean deleteBaseInfo(String ids, String table);
+
+	public Integer testAccount(String account);
+
+	public boolean addBootpageImge(Bootpage com);
+
+	public boolean updateBootpageimage(Long homeId, String spath);
+
+	public boolean addAboutus(Aboutus com);
+
+	public boolean updatpeAboutus(Long aboutusId, String title, String content);
+
+	public boolean addSupports(Supports com);
+
+	public boolean updatpeSupports(Long supportsId, String title, String content);
+
+	public boolean updatpeVersion(Long versionId, String title, String urlpath,
+			String urlNum);
+
+	public List<Message> loadMessageInfo(int rows,int page);
+
+	public Object loadMessageInfoCount();
+
+	public boolean addOnlinetest(Onlinetest com);
+
+	public boolean updatpeOnlinetest(Long onlinetestId, String topic, String testa,
+			String testb, String testc, String testd, Integer correctAnswer);
+
+	public boolean addKnowledge(Knowledge com);
+
+	public boolean updateKnowledge(Long knowledgeId, String title,
+			String introduction, String content, String videoUrl,
+			String source, String spath, String spathtw, String spathth);
+
+	public boolean addFirstpage(Firstpage com);
+
+	public boolean updateFirstpage(Long firstpageId, String title,
+			String introduction, String content, String source, String spath, String spathtw);
+
+	public List<Onlinefirst> loadOnlinefirstInfo();
+
+	public boolean addOnlinefirst(Onlinefirst com);
+
+	public boolean updateOnlinefirst(Long onlinefirstId, String content,String introduction, String spath);
+
+	public List<Recommend> loadRecommendInfo(int rows,int page);
+
+	public Object loadRecommendInfoCount();
+
+	public boolean addRecommend(Recommend com);
+
+	public boolean updateRecommend(Long recommendId, String title,
+			String introduction, String content, String spath, String spathtw);
+
+	public int topFirstpageCancel(String ids);
+
+	public Long findFirstpageCount(long long1);
+
+	public void updateFirstpage(long long1);
+
+
+
+
+
+}

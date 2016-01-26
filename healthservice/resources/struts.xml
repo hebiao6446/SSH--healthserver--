@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+        "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.convention.default.parent.package" value="defaultPackage" />
+	<constant name="struts.convention.package.locators" value="action" />
+	<constant name="struts.action.extension" value="action" />
+	<constant name="struts.convention.package.locators.basePackage" value="com.health" />
+	<constant name="struts.custom.i18n.resources" value="globalMessages" />
+	<constant name="struts.ui.theme" value="simple"/>
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<constant name="struts.multipart.maximumSize" value="50000000"/>  
+	<constant name="struts.multipart.maxSize" value="50000000"/>  
+	
+	<package name="defaultPackage" extends="convention-default">
+	<interceptors>
+			<interceptor-stack name="defaultStack">
+				<interceptor-ref name="store">
+					<param name="operationMode">AUTOMATIC</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack" />
+			</interceptor-stack>
+			<!-- 自定义拦截器 -->
+		</interceptors>
+		<default-interceptor-ref name="defaultStack" />
+	</package> 
+</struts>
+	
